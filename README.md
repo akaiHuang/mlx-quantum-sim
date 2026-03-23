@@ -25,30 +25,41 @@ A quantum circuit simulator that runs on Apple Metal GPU via [MLX](https://githu
 
 ## Honest Comparison: Apple Silicon vs NVIDIA
 
-| | M1 Max (64GB) | M2 Ultra (192GB) | RTX 4090 | A100 (cloud) |
-|---|---|---|---|---|
-| Max qubits | ~31 | **~33** | ~30 | ~32 |
-| Speed | 1x (baseline) | 1.3x | **15x** | **15x** |
-| Power draw | **40W** | **60W** | 450W | 300W |
-| Electricity/year (24/7) | **$35** | **$53** | $394 | $263 (+ rental) |
-| Hardware cost | $0 (you have it) | $5,000 | $1,600 | $1.10/hr rental |
-| Noise level | Silent | Silent | Loud | Datacenter |
-| Also useful for | Everything else | Everything else | Gaming | Nothing else |
+All qubit counts assume complex64 (float32) precision. Subtract ~1 qubit for complex128.
+
+| | M1 Max (64GB) | M2 Ultra (192GB) | RTX 4090 (24GB) | A100 cloud (80GB) | Colab T4 (free, 16GB) |
+|---|---|---|---|---|---|
+| Max qubits (float32) | ~32 | **~34** | ~31 | ~33 | ~30 |
+| Speed (30q circuit) | ~5 ms | ~4 ms | **~0.3 ms** | **~0.3 ms** | ~1 ms |
+| 1000 circuits (30q) | ~5 sec | ~4 sec | **~0.3 sec** | **~0.3 sec** | ~1 sec |
+| Power per experiment | **0.06 Wh** | **0.07 Wh** | 0.04 Wh | N/A | N/A |
+| Extra hardware cost | $0 (if you own a Mac) | $5,000 | $1,600 | $1.10/hr | $0 |
+| Setup time | `pip install mlx` | Same | Install CUDA + drivers | Cloud setup + SSH | Open browser |
+| Offline / private | ✅ | ✅ | ✅ | ❌ (cloud) | ❌ (cloud) |
+| Other uses | Daily work | Daily work | ML / gaming | ML / training | ML (limited) |
 
 ### Where Apple Silicon Wins
 
-- **You already own it.** No purchase, no rental, no credit card.
-- **Memory per dollar.** M2 Ultra 192GB = 33 qubits. No consumer NVIDIA card can do this.
-- **Electricity.** 40W vs 450W. Run experiments overnight without guilt.
-- **Iteration speed (human time).** Change code → run → see results. No uploading, no cloud setup, no SSH.
-- **Privacy.** Your quantum circuits stay on your machine.
+- **Zero marginal cost.** If you own a Mac, every experiment is free. No cloud bills, no GPU purchase.
+- **Large unified memory.** M2 Ultra 192GB → 34 qubits. No single consumer GPU matches this.
+- **Fast iteration.** Edit code → run → results. No uploading, no environment setup, no waiting for cloud instances.
+- **Privacy.** Circuits never leave your machine.
 
-### Where NVIDIA Wins
+### Where NVIDIA / Cloud Wins
 
-- **Raw speed.** 15x faster per circuit. Not close.
-- **Ecosystem.** cuQuantum, qsim, Qiskit Aer CUDA — mature, optimized, battle-tested.
-- **Scale.** Multi-GPU, cluster computing. Apple can't do this.
-- **Community.** More users, more examples, more support.
+- **Raw speed.** 10-15x faster per circuit. For production workloads, this matters.
+- **Ecosystem.** cuQuantum, qsim, Qiskit Aer CUDA — mature and highly optimized.
+- **Scale.** Multi-GPU and cluster computing. Apple can't do this.
+- **Free tier.** Google Colab gives you a T4 GPU for free. Honest alternative for small experiments.
+
+### Why Not Just Use Google Colab?
+
+Colab is a strong free option for small experiments. Use mlx-quantum-sim when you need:
+- **Offline access** (no internet required)
+- **More than 16GB** GPU memory (Colab T4 limit = ~30 qubits)
+- **Long-running experiments** (Colab disconnects after ~12 hours)
+- **Privacy** (proprietary quantum circuits stay local)
+- **Reproducibility** (no session timeouts or random disconnects)
 
 ### The Real Decision
 
